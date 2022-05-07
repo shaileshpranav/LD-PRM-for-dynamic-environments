@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import math
-import obstructioncheck as oc
+import src.obstructioncheck as oc
 import copy
 
 class PRMPlanner:

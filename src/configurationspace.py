@@ -1,6 +1,6 @@
 import numpy as np
-from obstacle_check import *
-from prmplanner import PRMPlanner
+from src.obstacle_check import *
+from src.prmplanner import PRMPlanner
 
 class ConfigurationSpace:
     def __init__(self, x_limit, y_limit, radius_of_bot=0, clearance=0):

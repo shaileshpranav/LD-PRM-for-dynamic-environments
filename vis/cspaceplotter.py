@@ -1,10 +1,10 @@
 from pydoc import visiblename
 import numpy as np
 import matplotlib.pyplot as plt
-from configurationspace import ConfigurationSpace
-from robot import TurtleBot
-import constants as CONST
-import obstructioncheck as oc
+from src.configurationspace import ConfigurationSpace
+from src.robot import TurtleBot
+import params.constants as CONST
+import src.obstructioncheck as oc
 from math import cos, sin
 
 class CSpacePlotter:

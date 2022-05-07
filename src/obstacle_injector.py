@@ -1,5 +1,5 @@
 import time
-from constants import DONE, MOVING
+from params.constants import DONE, MOVING
 from math import sin
 
 

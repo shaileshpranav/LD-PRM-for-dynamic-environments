@@ -1,13 +1,13 @@
 import math
 import numpy as np
-from input_receiver import receive_inputs
-from pathexplorer import PathExplorer
-from configurationspace import ConfigurationSpace
-from heuristics import EUCL_HEURISTIC, MANHTN_HEURISTIC
-from robot import TurtleBot
+from params.input_receiver import receive_inputs
+from src.pathexplorer import PathExplorer
+from src.configurationspace import ConfigurationSpace
+from params.heuristics import EUCL_HEURISTIC, MANHTN_HEURISTIC
+from src.robot import TurtleBot
 
 
-def run_a_star_algo():
+def execute_AStar():
     is_input_valid, init_pos, target_pos, orientation, clearance_req = receive_inputs()
 
     if is_input_valid:
@@ -27,7 +27,7 @@ def run_a_star_algo():
 
 
 if __name__ == "__main__":
-    run_a_star_algo()
+    execute_AStar()
 
     
         

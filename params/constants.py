@@ -1,5 +1,5 @@
 import math
-
+from utils.io import foldercheck
 
 
 L, R = 0, 1
@@ -31,3 +31,5 @@ NO_OBST = 'No obstruction present. Resuming...'
 GRAPH_CLR = 'lightskyblue'
 PATH_CLR = 'blue'
 TRACK_CLR = 'white'
+
+SAVEPATH = foldercheck("./results")

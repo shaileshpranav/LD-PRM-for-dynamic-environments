@@ -1,25 +1,24 @@
-import cv2
+# import cv2
 import numpy as np
-import math
+import math, time, traceback, copy, json, threading
 from queue import Queue, deque
-import time
 import matplotlib.pyplot as plt
-from simplepriorityqueue import SimplePriorityQueue
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from cspaceplotter import CSpacePlotter
-from constants import *
-from curveplotter import plot_curve
-import json
-from videowriter import write_video
-from heuristics import EUCL_HEURISTIC
-import threading
-import obstacle_injector as obj_inj
-from obstructioncheck import check_obstacle_collision, get_covered_sample_nodes, adjust_intersecting_edges
-from adjust_roadmaps import adjust_roadmap
-import copy
-import traceback
-from math import cos, sin
+
+# from matplotlib.animation import FuncAnimation
+from params.heuristics import EUCL_HEURISTIC
+from params.constants import *
+
+from vis.cspaceplotter import CSpacePlotter
+from vis.curveplotter import plot_curve
+
+from utils.io import write_video
+from utils.simplepriorityqueue import SimplePriorityQueue
+
+
+import src.obstacle_injector as obj_inj
+from src.obstructioncheck import check_obstacle_collision, get_covered_sample_nodes, adjust_intersecting_edges
+from src.adjust_roadmaps import adjust_roadmap
+
 
 class PathExplorer:
 
@@ -31,14 +30,20 @@ class PathExplorer:
 
 
     def start_path_planning(self,  t_bot, c_space, heuristic_func, initial_pos=(-2, -3), target_pos=(0,4), orientation=0):
+        """
+        Inputs: 
+        t_bot - Instance of the robot (Turtlebot class given in src/robot.py)
+        c_space - Instance of the Configuration Space (ConfigurationSpace class given in src/ConfigurationSpace.py )
+        initial_pos - Tuple of initial x,y position in 2D (default (-2, -3)) 
+        target_pos - Tuple of target x,y position in 2D (default (0, 4)) 
+        orientation - theta angle of robot at initial position (default 0 degrees)
+        """
         c_space_nodes, c_space_graph = c_space.get_prm_graph()
         # initial_pos = ()#(-2.54, -3) #list(c_space.sample_nodes)[3]  #(-2.54, -3) # (x,y) 
         # target_pos = ()#(0,4) #list(c_space.sample_nodes)[-7] # (4,4)
 
         c_space.get_prm_graph([initial_pos, target_pos], True)
-        
-        
-
+                
         orientation = 30
         initial_node = {
             'pos': initial_pos,
@@ -70,7 +75,9 @@ class PathExplorer:
 
         try:
             while running:
+                # run PRM Roadmap
                 is_path_found = self.find_path(latest_init_node, target_pos, t_bot, c_space, heuristic_func)
+                # Start visualization if path exists.
                 if is_path_found:
                     is_goal_reached, last_pos_node = self.start_visualization(latest_init_node, initial_node, target_pos, self.path, self.path_cost, c_space, t_bot, bot_status)
                     if not is_goal_reached:
@@ -234,7 +241,7 @@ class PathExplorer:
 
     def start_visualization(self, initial_node, first_init_node, target_pos, path, path_cost, c_space, t_bot, bot_status):
         is_goal_reached = True
-        fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+        # fourcc = cv2.VideoWriter_fourcc(*'DIVX')
         fig = self.fig
         ax = self.ax
         
@@ -253,7 +260,7 @@ class PathExplorer:
         num_dots = len(dots)
         
         print('Visualization in process...\n')
-        # out = cv2.VideoWriter("./media/astar_nonholonomic.mp4", fourcc, 1.0, (509, 524))
+        # out = cv2.VideoWriter(f"{SAVEPATH}/ld-prm.mp4", fourcc, 1.0, (509, 524))
         
         position, orient = list(initial_node['pos']), initial_node['orientation']
         x_pos, y_pos = position[0], position[1]
@@ -266,7 +273,7 @@ class PathExplorer:
 
         frame_num = len(bot_status[PATH_COVERED])
         frame_num = frame_num+1 if frame_num != 0 else frame_num 
-        plt.savefig('./media/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
+        plt.savefig(f'{SAVEPATH}/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
 
         
         position, orient = list(first_init_node['pos']), first_init_node['orientation']
@@ -299,7 +306,7 @@ class PathExplorer:
                 last_x, last_y, last_orient, last_bot_path_cost = bot_status[LAST_STATUS]
 
                 bot_status[PATH_COVERED].append((last_x, last_y, last_orient))
-                plt.savefig('./media/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
+                plt.savefig(f'{SAVEPATH}/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
 
                 obstacle_info = c_space.obstacle_list[-1]
                 covered_sample_nodes = get_covered_sample_nodes(c_space.sample_nodes, obstacle_info)
@@ -326,14 +333,14 @@ class PathExplorer:
 
             if save_fig:
                 frame_num = len(bot_status[PATH_COVERED])
-                plt.savefig('./media/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
+                plt.savefig(f'{SAVEPATH}/frame'+str(frame_num).zfill(5)+'.png', bbox_inches='tight')
 
 
         if not bot_status[MOVING]:
             return is_goal_reached, latest_init_node
         
         ax.set_title('Goal reached!', fontsize=13)
-        plt.savefig('./media/frame.png', bbox_inches='tight')
+        plt.savefig(f'{SAVEPATH}/frame.png', bbox_inches='tight')
             
 
         sample_num = 1
@@ -342,7 +349,7 @@ class PathExplorer:
         plt.draw()
         plt.show()
         # out.release()
-        write_video(frame_num, 1)
+        write_video(SAVEPATH, frame_num, 1)
 
         print('\nVisualization Complete.')
 
@@ -388,9 +395,6 @@ class PathExplorer:
             pts[:,0]+=new_x
             pts[:,1]+=new_y
             cir = plt.Polygon(pts, fc='g', ec='black', closed=True)   
-
-
-
 
             # cir = plt.Circle((new_x, new_y), 0.5, fc=color)
             # plt.gca().add_patch(cir)
@@ -439,7 +443,7 @@ class PathExplorer:
         return new_x, new_y, math.degrees(orient), bot_path_cost
     
     def transform_pts(self,pts,theta=1):
-        pts= ( np.dot(np.array([ [cos(theta), -sin(theta)], [sin(theta), cos(theta)]]) , pts.T) ).T
+        pts= ( np.dot(np.array([ [math.cos(theta), -math.sin(theta)], [math.sin(theta), math.cos(theta)]]) , pts.T) ).T
         return pts
 
     def examine_bot_stop_reason(self, c_space, current_pose, path_nodes):

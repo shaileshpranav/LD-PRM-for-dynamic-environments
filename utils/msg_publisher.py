@@ -1,4 +1,4 @@
-from constants import *
+from params.constants import *
 import json
 import time
 
