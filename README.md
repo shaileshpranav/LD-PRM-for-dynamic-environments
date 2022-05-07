@@ -5,7 +5,7 @@
 erated samples are stored in 2D array-like data structure, used as a lookup table to check if there are obstacles en- countered. If a sample lies within the obstacle, our algorithm adjusts the collision points so that we have samples free from the obstacle space. The roadmap adjusts itself
 to have samples from the obstacle-free space whenever a change in the environment is observed. This report contains our experimentation and simulation of our implementation of this self-adjusting roadmap algorithm.
 
-
+[!image](./media/results.png)
 
 #### Authors:
 ```
