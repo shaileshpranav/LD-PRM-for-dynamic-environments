@@ -23,3 +23,6 @@ UID :
 
 
 #### References:
+```
+@INPROCEEDINGS{8665326,  author={Khaksar, Weria and Uddin, Md Zia and Torresen, Jim},  booktitle={2018 IEEE International Conference on Robotics and Biomimetics (ROBIO)},   title={Self-Adjusting Roadmaps: A Fast Sampling-Based Path Planning Algorithm for Navigation in Unknown Environments},   year={2018},  volume={},  number={},  pages={1094-1101},  doi={10.1109/ROBIO.2018.8665326}}
+```
