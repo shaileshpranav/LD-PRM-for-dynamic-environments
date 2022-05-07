@@ -7,6 +7,13 @@ to have samples from the obstacle-free space whenever a change in the environmen
 
 ![image](media/results.png)
 
+#### Low Dispersion Probabilistic Roadmap:
+
+![algo](media/ldprmalgo.png)
+
+Refer our report for full details.
+
+
 #### Authors:
 ```
 Name: Aswath Muthuselvam :
