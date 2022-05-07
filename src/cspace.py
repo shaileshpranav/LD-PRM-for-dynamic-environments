@@ -1,6 +1,9 @@
 import numpy as np
-from src.obstacle_check import *
-from src.prmplanner import PRMPlanner
+from src.obstacleChecker import *
+from src.PRMplanner import PRMPlanner
+
+import params.constants as CONST
+
 
 class ConfigurationSpace:
     def __init__(self, x_limit, y_limit, radius_of_bot=0, clearance=0):
@@ -74,7 +77,7 @@ class ConfigurationSpace:
             [-5, -5],
         ])
 
-        self.obstacle_list = [[(0.5+padding), [0, 0]]]
+        self.obstacle_list = [[(1+padding), (0, 0)]]
 
 
     def is_obstacle_in_path(self, p1, p2, icc, arc_rad):
@@ -111,8 +114,7 @@ class ConfigurationSpace:
 
     def get_prm_graph(self, nodes=[], adjust_graph=False, max_num_edges=10):
         if not adjust_graph:
-            self.planner = PRMPlanner(250, 2, self.x_limit, self.y_limit)
-            # self.planner = PRMPlanner(100, 2, self.x_limit, self.y_limit)
+            self.planner = PRMPlanner(CONST.N, 2, self.x_limit, self.y_limit)
             self.sample_nodes = self.planner.random_position(self.obstacle_list)
             nodes = self.sample_nodes
         self.graph = self.planner.generate_roadmap(nodes, self.graph, self.obstacle_list, max_num_edges)

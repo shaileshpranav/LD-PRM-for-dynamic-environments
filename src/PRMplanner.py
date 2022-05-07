@@ -1,8 +1,9 @@
 import random
 import numpy as np
 import math
-import src.obstructioncheck as oc
+import src.checkObstruction as oc
 import copy
+
 
 class PRMPlanner:
     def __init__(self, n, dist, x_limit, y_limit):

@@ -1,10 +1,10 @@
-from pydoc import visiblename
 import numpy as np
 import matplotlib.pyplot as plt
-from src.configurationspace import ConfigurationSpace
+from src.cspace import ConfigurationSpace
 from src.robot import TurtleBot
 import params.constants as CONST
-import src.obstructioncheck as oc
+import src.checkObstruction as oc
+
 from math import cos, sin
 
 class CSpacePlotter:
@@ -83,13 +83,13 @@ class CSpacePlotter:
             #children = c_space_graph.get(tuple(node))
             for child in children:
                 if not self.is_edge_intersecting(parent, child, self.c_space.obstacle_list):
-                    ax.plot([parent[0], child[0]], [parent[1], child[1]], color=(0.8,0.8,0.8,0.2),linewidth=3)
-                ax.scatter(child[0], child[1], alpha=0.8, c='w', edgecolors='none', s=30)
+                    ax.plot([parent[0], child[0]], [parent[1], child[1]], color=CONST.RDMP_CLR, alpha=0.1)
+                ax.scatter(child[0], child[1], alpha=0.1, c='w', edgecolors='none', s=10)
                 num_edges += 1
         print('num_edges', num_edges)
 
     def plot_cspace_obstacles(self, ax):
-        # print("Obstacle list: ",self.c_space.obstacle_list)
+        print("Obstacle list: ",self.c_space.obstacle_list)
         self.reset_obstacle_patches()
         for obstacle in self.c_space.obstacle_list:
             w_l = 0.5
@@ -101,18 +101,16 @@ class CSpacePlotter:
                 [0+obstacle[0], 0-w_l*obstacle[0]],
                 ])
             # pts = np.vstack((pts,pts[0]))
-            pts = self.transform_pts(pts,1.5)
+            pts = self.transform_pts(pts,theta=1.5)
             pts[:,0]+=obstacle[1][0]
             pts[:,1]+=obstacle[1][1]
-            cir = plt.Polygon(pts, fc='red', ec='black', closed=True)
+            cir = plt.Polygon(pts, fc=CONST.OBS_CLR, ec='black', closed=True)
             # cir = plt.Circle((obstacle[1]), obstacle[0], fc=None)
             # plt.gca().add_patch(cir)
             self.obstacle_patches.append(ax.add_patch(cir))
 
     def reset_obstacle_patches(self):
-        # print(f"length = {len(self.obstacle_patches)}")
-        for i in reversed(range(len(self.obstacle_patches))):
-            # print (f"Obs paths:{i},,,,{self.obstacle_patches[i]}")
+        for i in range(len(self.obstacle_patches)):
             self.obstacle_patches[i].remove()
             self.obstacle_patches.pop()
 
@@ -141,7 +139,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     plt.xlim(c_space.x_limit[0]-0.1, c_space.x_limit[1]+0.1)
     plt.ylim(c_space.y_limit[0]-0.1, c_space.y_limit[1]+0.1)
-    plt.grid(visible=False)
+    plt.grid()
     ax.set_aspect('equal')
 
     plotter.plotMap(fig, ax)

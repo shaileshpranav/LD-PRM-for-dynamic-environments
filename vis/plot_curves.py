@@ -49,7 +49,6 @@ def plot_curve(ax, init_point, init_orient, velocity, bot_path_cost, adjust_angl
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    clearance_req = 0.2
     #t_bot = TurtleBot(radius=(0.354/2), clearance=0, wheel_rad=(0.076/2), dist_bet_wheels=0.354)
     t_bot = TurtleBot(radius=(0.105), clearance=clearance_req, wheel_rad=(0.033), dist_bet_wheels=0.16)
     actions = [[5,5],[5,0],[0,5],[5,10],[10,5]] #[[1,40], [40, 40], [20, 40], [40, 0]]

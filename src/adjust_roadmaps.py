@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from src.obstructioncheck import is_line_circle_intersecting
+from src.checkObstruction import is_line_circle_intersecting
 
 def shift_points(collision_points, center, radius):
     shifted_points = {}

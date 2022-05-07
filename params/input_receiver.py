@@ -4,12 +4,12 @@ from params.constants import *
 def receive_inputs():
     #print(">> Bottom left corner is considered as (0,0)")
     
-    print(">> Enter the initial and target positions (within -5 to 5 mtr), initial orientation, clearance required for the robot")
+    print(">> Enter the initial and target positions (within -5 to 5mtr), initial orientation, clearance required for the robot")
     print(">> Example: if point is (x=2, y=5), then your input should be '2 5'")
     
-    init_pos_str = input("Initial position (-5:5) (x y): ") or "-3 -2"
-    orientation_str = input("Initial Orientation (0-360) (in degrees): ") or "0"
-    target_pos_str = input("Target position (-5:5) (x y): ") or "3 4"
+    init_pos_str = input("Initial position (x y): ") or "-2 0"
+    orientation_str = input("Initial Orientation (in degrees): ") or "0"
+    target_pos_str = input("Target position (x y): ") or "3 4"
     clearance_str = input("Clearance required (in meters, recommended: 0 to 0.35m): ") or "-0.2"
     is_input_valid = True
     

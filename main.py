@@ -1,13 +1,13 @@
 import math
 import numpy as np
 from params.input_receiver import receive_inputs
-from src.pathexplorer import PathExplorer
-from src.configurationspace import ConfigurationSpace
+from src.pathExplorer import PathExplorer
+from src.cspace import ConfigurationSpace
 from params.heuristics import EUCL_HEURISTIC, MANHTN_HEURISTIC
 from src.robot import TurtleBot
 
 
-def execute_AStar():
+def executeAstar():
     is_input_valid, init_pos, target_pos, orientation, clearance_req = receive_inputs()
 
     if is_input_valid:
@@ -27,7 +27,7 @@ def execute_AStar():
 
 
 if __name__ == "__main__":
-    execute_AStar()
+    executeAstar()
 
     
         
