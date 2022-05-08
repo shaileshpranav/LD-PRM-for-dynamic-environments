@@ -18,7 +18,9 @@ python3 main.py
 ![algo](media/ldprmalgo.png)
 
 Refer our report for full details.
+### Video Results
 
+[![Video Results](https://i9.ytimg.com/vi/7Sg9Q9SEjzQ/mq2.jpg?sqp=CPSd4ZMG&rs=AOn4CLCeOcxqcaN9RhFFhuWdhJXpyBtASA)](https://www.youtube.com/watch?v=7Sg9Q9SEjzQ "Video Results")
 
 #### Authors:
 ```
