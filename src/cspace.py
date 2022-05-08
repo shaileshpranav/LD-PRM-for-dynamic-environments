@@ -2,7 +2,7 @@ import numpy as np
 from src.obstacleChecker import *
 from src.PRMplanner import PRMPlanner
 
-import params.constants as CONST
+import params.const as CONST
 
 
 class ConfigurationSpace:

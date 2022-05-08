@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from src.cspace import ConfigurationSpace
-from src.robot import TurtleBot
-import params.constants as CONST
-import src.checkObstruction as oc
+from src.robot import SDV
+import params.const as CONST
+import src.checkObst as oc
 
 from math import cos, sin
 
@@ -132,7 +132,7 @@ class CSpacePlotter:
 
 
 if __name__ == "__main__":
-    t_bot = TurtleBot(radius=(0.105), clearance=0.4, wheel_rad=(0.033), dist_bet_wheels=0.16)
+    t_bot = SDV(radius=(0.105), clearance=0.4, wheel_rad=(0.033), dist_bet_wheels=0.16)
     c_space = ConfigurationSpace(x_limit=(-5, 5), y_limit=(-5,5), radius_of_bot=t_bot.radius, clearance=0.45)
     plotter = CSpacePlotter(c_space)
 

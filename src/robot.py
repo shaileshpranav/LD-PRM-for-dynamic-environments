@@ -3,7 +3,7 @@ class Robot:
         self.radius = radius
         self.clearance = clearance
 
-class TurtleBot(Robot):
+class SDV(Robot):
     def __init__(self, radius, clearance, wheel_rad, dist_bet_wheels):
         super().__init__(radius, clearance)
         self.wheel_rad = wheel_rad
