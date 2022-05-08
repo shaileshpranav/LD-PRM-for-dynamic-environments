@@ -1,12 +1,13 @@
 import traceback
-from params.const import *
+from params.constants import *
 
-def info_input():
-    #print(">> Bottom left corner is considered as (0,0)")
-    
+def readInputs():
+    print("#"*50)
+    print(">> Bottom left corner is considered as (0,0)")
     print(">> Enter the initial and target positions (within -5 to 5mtr), initial orientation, clearance required for the robot")
     print(">> Example: if point is (x=2, y=5), then your input should be '2 5'")
-    
+    print("#"*50)
+
     init_pos_str = input("Initial position (x y): ") or "-2 0"
     orientation_str = input("Initial Orientation (in degrees): ") or "0"
     target_pos_str = input("Target position (x y): ") or "3 4"
@@ -31,4 +32,4 @@ def info_input():
     return is_input_valid, init_pos, target_pos, orientation, clearance_req
 
 if __name__ == "__main__":
-    info_input()
+    readInputs()

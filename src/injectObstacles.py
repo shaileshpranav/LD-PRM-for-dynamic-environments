@@ -1,6 +1,6 @@
 import time
-from params.const import DONE, MOVING
-# from math import sin
+from params.constants import DONE, MOVING
+from math import sin
 
 
 def obstacle_injector(task_status, bot_status, c_space):

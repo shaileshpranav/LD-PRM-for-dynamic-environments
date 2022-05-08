@@ -1,8 +1,7 @@
 import random
 import numpy as np
 import math
-# import checkObst as oc
-from src.checkObst import is_point_inside_circle, is_line_circle_intersecting
+import src.checkObstruction as oc
 import copy
 
 
@@ -44,7 +43,7 @@ class PRMPlanner:
             px, py = random.uniform(x_lo, x_hi), random.uniform(y_lo, y_hi)
             px, py = round(px, 1), round(py, 1)
 
-            if (self.within_range(px, py)) and (not self.is_inside_obs((px,py), obstacle_list)) and (px,py) not in self.sample: #Changed
+            if (self.within_range(px, py)) and (not self.is_in_obstacles((px,py), obstacle_list)) and (px,py) not in self.sample: #Changed
                 self.sample.add((px,py))  
                 n = n + 1 
         return self.sample
@@ -57,19 +56,19 @@ class PRMPlanner:
         return (x_lo < px < x_hi and y_lo < py < y_hi)
 
 
-    def is_inside_obs(self, point, obstacle_list):
+    def is_in_obstacles(self, point, obstacle_list):
         for obstacle in obstacle_list:
-            if is_point_inside_circle(point, obstacle[1], obstacle[0]):
+            if oc.is_point_inside_circle(point, obstacle[1], obstacle[0]):
                 return True
         return False
 
     def is_edge_intersecting(self, p1, p2, obstacle_list):
         for obstacle in obstacle_list:
-            if is_line_circle_intersecting(p1, p2, obstacle[1], obstacle[0]):
+            if oc.is_line_circle_intersecting(p1, p2, obstacle[1], obstacle[0]):
                 return True
         return False
 
-    def get_L2_norm_dist(self, current_position, next_position):
+    def get_euclidean_distance(self, current_position, next_position):
         x1, y1 = current_position[0], current_position[1]
         x2, y2 = next_position[0], next_position[1]
         distance = np.sqrt((math.pow(x2 - x1, 2)) + (math.pow(y2 - y1, 2)))
@@ -77,7 +76,7 @@ class PRMPlanner:
 
     def within_distance(self, current_position, next_position):
         required_distance = self.distance
-        distance = self.get_L2_norm_dist(current_position, next_position)
+        distance = self.get_euclidean_distance(current_position, next_position)
         return (distance <= required_distance)
 
     def generate_roadmap(self, sample_nodes, graph, obstacle_list, max_num_edges=5):
@@ -94,7 +93,7 @@ class PRMPlanner:
                 parent_node = current_node
                 for sample in existing_nodes:
                     if sample!=current_node and self.within_distance(current_node, sample) and not self.is_edge_intersecting(sample, current_node, obstacle_list):
-                        distance_map.append((self.get_L2_norm_dist(sample, current_node),sample))
+                        distance_map.append((self.get_euclidean_distance(sample, current_node),sample))
                 distance_map = sorted(distance_map, key=lambda x : x[0])
                 count = 0
                 for pair in distance_map:

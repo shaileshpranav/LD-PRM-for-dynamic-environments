@@ -1,31 +1,33 @@
-from params.info_input import info_input
-from pathFinder import PathFinder
+import math
+import numpy as np
+from params.input_receiver import readInputs
+from src.pathExplorer import PathPlanner
 from src.cspace import ConfigurationSpace
-from params.heuristics import EUCL_HEURISTIC
-from src.robot import SDV
+from params.heuristics import EUCL_HEURISTIC, MANHTN_HEURISTIC
+from src.robot import Robot
 
 
-def plan_path():
-    is_input_valid, init_pos, target_pos, orientation, clearance_req = info_input()
+def main():
+    isValid, start_pos, target_pos, orientation, clearance = readInputs()
 
-    if is_input_valid:
-        init_pos = init_pos[0], init_pos[1]
-        target_pos = target_pos[0], target_pos[1]
+    if not isValid: return None
 
-        # parameters of the turtle_bot referred from turtle bot's data sheet
-        #t_bot = SDV(radius=(0.354/2), clearance=clearance_req, wheel_rad=(0.076/2), dist_bet_wheels=0.354)
-        t_bot = SDV(radius=(0.105), clearance=clearance_req, wheel_rad=(0.033), dist_bet_wheels=0.16)
- 
-        c_space = ConfigurationSpace(x_limit=(-5, 5), y_limit=(-5,5), radius_of_bot=t_bot.radius, clearance=clearance_req)
+    start_pos = start_pos[0], start_pos[1]
+    target_pos = target_pos[0], target_pos[1]
 
-        path_finder = PathFinder()
-        path_params = path_finder.start_path_planning(t_bot, c_space, EUCL_HEURISTIC, init_pos, target_pos, orientation)
-        return path_params
+    # parameters of the turtle_bot referred from turtle bot's data sheet
+    bot = Robot(radius=(0.105), clearance=clearance, wheel_rad=(0.033), dist_bet_wheels=0.16)
+
+    c_space = ConfigurationSpace(x_limit=(-5, 5), y_limit=(-5,5), radius_of_bot=bot.radius, clearance=clearance)
+
+    planner = PathPlanner()
+    planner_results = planner.plan(bot, c_space, EUCL_HEURISTIC, start_pos, target_pos, orientation)
+    return planner_results
 
 
 
 if __name__ == "__main__":
-    plan_path()
+    main()
 
     
         

@@ -3,7 +3,7 @@ import numpy as np
 import copy
 
 
-def check_obs_collision(current_position, path, obstacle_info):
+def check_obstacle_collision(current_position, path, obstacle_info):
     if len(obstacle_info) == 2:
         print("Circle")
         center, radius = obstacle_info[1], obstacle_info[0]

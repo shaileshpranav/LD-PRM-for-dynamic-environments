@@ -1,37 +1,32 @@
-import cv2, math, time, json, copy, traceback
+import cv2, math, time, json, copy, traceback, threading
 import numpy as np
-from queue import Queue, deque
-
-from utils.PriorityQ import SimplePriorityQueue
+from queue import deque
 import matplotlib.pyplot as plt
 
 from vis.plot_cspace import CSpacePlotter
-from params.const import *
+# from vis.plot_curves import plot_curve
+
+from params.constants import *
 from params.heuristics import EUCL_HEURISTIC
-import threading
-import src.injectObst as obj_inj
-from src.checkObst import check_obs_collision, get_covered_sample_nodes, adjust_intersecting_edges
+import src.injectObstacles as obsInject
+from src.checkObstruction import check_obstacle_collision, get_covered_sample_nodes, adjust_intersecting_edges
 from src.adjust_roadmaps import adjust_roadmap
 
+from utils.PriorityQ import SimplePriorityQueue
+from utils.videowriter import write_video
 
-class PathFinder:
+
+class PathPlanner:
 
     def __init__(self):
         self.path = []
         self.path_cost = 0
         
 
-
-
-    def start_path_planning(self,  t_bot, c_space, heuristic_func, initial_pos=(-2, -3), target_pos=(0,4), orientation=0):
+    def plan(self,  t_bot, c_space, heuristic_func, initial_pos=(-2, -3), target_pos=(0,4), orientation=0):
         c_space_nodes, c_space_graph = c_space.get_prm_graph()
-        # initial_pos = ()#(-2.54, -3) #list(c_space.sample_nodes)[3]  #(-2.54, -3) # (x,y) 
-        # target_pos = ()#(0,4) #list(c_space.sample_nodes)[-7] # (4,4)
-
         c_space.get_prm_graph([initial_pos, target_pos], True)
         
-        
-
         orientation = 30
         initial_node = {
             'pos': initial_pos,
@@ -54,7 +49,7 @@ class PathFinder:
 
         task_status = {DONE: False}
         bot_status = {MOVING: False, PATH_COVERED: []}
-        obstacle_injector = threading.Thread(target=obj_inj.obstacle_injector, args=(task_status, bot_status, c_space))
+        obstacle_injector = threading.Thread(target=obsInject.obstacle_injector, args=(task_status, bot_status, c_space))
 
         self.initialize_matplot(c_space)
 
@@ -296,11 +291,8 @@ class PathFinder:
 
                 obstacle_info = c_space.obstacle_list[-1]
                 covered_sample_nodes = get_covered_sample_nodes(c_space.sample_nodes, obstacle_info)
-                #covered_points = set(covered_points)
-                #covered_points.update(covered_sample_nodes)
 
-                adjust_intersecting_edges(c_space, obstacle_info)
-                
+                adjust_intersecting_edges(c_space, obstacle_info)                
                 adjust_roadmap(c_space.graph, covered_sample_nodes, c_space.sample_nodes, obstacle_info)
                 
                 
@@ -334,7 +326,8 @@ class PathFinder:
         fig.show()
         plt.draw()
         plt.show()
-       
+        # out.release()
+        write_video(frame_num, 1)
 
         print('\nVisualization Complete.')
 
@@ -380,9 +373,6 @@ class PathFinder:
             pts[:,0]+=new_x
             pts[:,1]+=new_y
             cir = plt.Polygon(pts, fc='g', ec='black', closed=True)   
-
-
-
 
             # cir = plt.Circle((new_x, new_y), 0.5, fc=color)
             # plt.gca().add_patch(cir)
@@ -445,7 +435,7 @@ class PathFinder:
         new_obstacle = c_space.obstacle_list[-1]
         remaining_path = copy.deepcopy(remaining_path)
         del remaining_path[0]
-        is_obstructing, covered_points = check_obs_collision(current_point, remaining_path, new_obstacle)
+        is_obstructing, covered_points = check_obstacle_collision(current_point, remaining_path, new_obstacle)
         return is_obstructing
 
     def get_last_node(self, current_pose, parent_node, target_pos, bot_path_cost):
