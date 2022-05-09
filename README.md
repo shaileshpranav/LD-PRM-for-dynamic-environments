@@ -6,7 +6,7 @@ erated samples are stored in 2D array-like data structure, used as a lookup tabl
 to have samples from the obstacle-free space whenever a change in the environment is observed. This report contains our experimentation and simulation of our implementation of this self-adjusting roadmap algorithm.
 
 ### Video Results
- [![Video Results](https://i9.ytimg.com/vi/7Sg9Q9SEjzQ/mq2.jpg?sqp=CPSd4ZMG&rs=AOn4CLCeOcxqcaN9RhFFhuWdhJXpyBtASA)](https://www.youtube.com/watch?v=7Sg9Q9SEjzQ "Video Results")
+ [![Video Results](media/thumbnail.png)](https://www.youtube.com/watch?v=7Sg9Q9SEjzQ "Video Results")
 
 
 To run the codebase:
