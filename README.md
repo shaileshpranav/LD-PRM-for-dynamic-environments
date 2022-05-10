@@ -27,7 +27,7 @@ Refer our report for full details.
 
 #### Authors:
 ```
-Name: Aswath Muthuselvam :
+Name: Aswath Muthuselvam
 UID : 118286204
 ```
 ```
@@ -35,7 +35,7 @@ Name: Gokul Hari
 UID : 117430646
 ```
 ```
-Name: Shailesh Pranav
+Name: Shailesh Pranav Rajendran
 UID : 118261997
 ```
 
